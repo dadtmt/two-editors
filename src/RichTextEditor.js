@@ -3,15 +3,18 @@ import Editor from 'draft-js-plugins-editor'
 import createRichButtonsPlugin from 'draft-js-richbuttons-plugin'
 import { EditorState } from 'draft-js'
 
-const richButtonsPlugin = createRichButtonsPlugin()
-const { BoldButton, H1Button } = richButtonsPlugin
 
-const plugins = [richButtonsPlugin]
 
 export default class RichTextEditor extends Component {
 
   constructor() {
     super()
+    // instantiate plugins, plugin components on the component instance
+    const richButtonsPlugin = createRichButtonsPlugin()
+    const { BoldButton, H1Button } = richButtonsPlugin
+    this.plugins = [richButtonsPlugin]
+    this.components = { BoldButton, H1Button }
+
     this.handleChange = this.handleChange.bind(this)
     this.state = { editorState: EditorState.createEmpty() }
   }
@@ -21,6 +24,7 @@ export default class RichTextEditor extends Component {
   }
 
   render() {
+    const { BoldButton, H1Button } = this.components;
 
     return (
       <div style={{
@@ -35,7 +39,7 @@ export default class RichTextEditor extends Component {
           <Editor
             editorState={this.state.editorState}
             onChange={this.handleChange}
-            plugins={plugins}
+            plugins={this.plugins}
           />
       </div>
     )
